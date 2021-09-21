@@ -7,6 +7,28 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
+var localConfig Config
+
+func init() {
+	localConfig = Config{
+		Host:         "localhost",
+		Port:         3306,
+		User:         "shonn",
+		Password:     "123456",
+		Schema:       "shonn_github_db",
+		DialTimeout:  1000,
+		ReadTimeout:  3000,
+		WriteTimeout: 3000,
+		MaxIdleConns: 50,
+		MaxOpenConns: 100,
+		MaxLifetime:  3600000,
+	}
+}
+
+func LocalConfig() *Config {
+	return &localConfig
+}
+
 type Config struct {
 	Host         string
 	Port         int
