@@ -6,21 +6,21 @@ import (
 	"github.com/shonn-study/code-example/go/distributed-lock/model"
 )
 
-type MysqlInsterDeleteLockClient struct {
+type MysqlInsertDeleteLockClient struct {
 	db   *sql.DB
 	lock *model.MysqlInsterDeleteLock
 }
 
-func NewMysqlInsterDeleteLockClient(db *sql.DB, lock *model.MysqlInsterDeleteLock) *MysqlInsterDeleteLockClient {
-	return &MysqlInsterDeleteLockClient{
+func NewMysqlInsertDeleteLockClient(db *sql.DB, lock *model.MysqlInsterDeleteLock) *MysqlInsertDeleteLockClient {
+	return &MysqlInsertDeleteLockClient{
 		db:   db,
 		lock: lock,
 	}
 }
 
-func (c *MysqlInsterDeleteLockClient) Lock() error {
+func (c *MysqlInsertDeleteLockClient) Lock() error {
 	const sqlStr = `
-		INSERT INTO lock_tab(
+		INSERT INTO distributed_lock_tab(
 			lock_name, lock_remark, create_time, update_time) 
 		VALUES(
 			?, ?, REPLACE(unix_timestamp(now(3)),'.',''), REPLACE(unix_timestamp(now(3)),'.',''))
@@ -32,9 +32,9 @@ func (c *MysqlInsterDeleteLockClient) Lock() error {
 	return nil
 }
 
-func (c *MysqlInsterDeleteLockClient) UnLock() error {
+func (c *MysqlInsertDeleteLockClient) UnLock() error {
 	const sqlStr = `
-		DELETE FROM lock_tab 
+		DELETE FROM distributed_lock_tab 
 		WHERE
 			lock_name=?
 	`
@@ -45,11 +45,11 @@ func (c *MysqlInsterDeleteLockClient) UnLock() error {
 	return nil
 }
 
-func (c *MysqlInsterDeleteLockClient) GetLockDetail() (*model.MysqlInsterDeleteLock, error) {
+func (c *MysqlInsertDeleteLockClient) GetLockDetail() (*model.MysqlInsterDeleteLock, error) {
 	const sqlStr = `
 		SELECT 
 			id, lock_name, lock_remark, create_time, update_time
-		FROM lock_tab
+		FROM distributed_lock_tab
 		WHERE
 			lock_name=?
 	`
@@ -60,4 +60,8 @@ func (c *MysqlInsterDeleteLockClient) GetLockDetail() (*model.MysqlInsterDeleteL
 		return nil, err
 	}
 	return lock, nil
+}
+
+func (c *MysqlInsertDeleteLockClient) Close() error {
+	return c.db.Close()
 }

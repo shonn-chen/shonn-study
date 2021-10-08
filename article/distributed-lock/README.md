@@ -23,4 +23,4 @@ INSERT INTO distributed_lock_tab(lock_name, lock_remark, create_time, update_tim
 DELETE FROM lock_tab WHERE lock_name='lock_name';
 ```
 #### code example
-[基于数据库表记录插入删除实现分布式锁]()
+[基于数据库表记录插入删除实现分布式锁](https://github.com/shonn-chen/shonn-study/blob/main/code-example/go/distributed-lock/client/mysql_insert_delete_lock_client.go)

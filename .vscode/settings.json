@@ -1,0 +1,7 @@
+{
+    "go.autocompleteUnimportedPackages": true,
+    "go.inferGopath": false,
+    "go.docsTool": "gogetdoc",
+    "go.gopath": "/Users/workspace/learning/code/go1.14.4:/Users/workspace/personal/code",
+    "go.goroot": "/Users/xiaohongchen/.gvm/gos/go1.14.4"
+}
